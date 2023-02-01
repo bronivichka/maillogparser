@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Search maillog records test task</title>
+  <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+</head>
+<body>
+  <form action="http://77.244.217.43:8080/search/" id="searchForm">
+    <input type="text" name="address" placeholder="user@domain.com">
+    <input type="submit" value="Искать">
+  </form>
+
+<div id="result"></div>
+
+<script>
+$( "#searchForm" ).submit(function( event ) {
+ 
+  // Stop form from submitting normally
+  event.preventDefault();
+ 
+  // Get some values from elements on the page:
+  var $form = $( this ),
+    address = $form.find( "input[name='address']" ).val(),
+    url = $form.attr( "action" );
+ 
+  // Send the data using post
+  var posting = $.post( url, { address: address } );
+ 
+  // Put the results in a div
+  posting.done(function( data ) {
+    $( "#result" ).empty().html( data );
+  });
+});
+</script>
+
+</body>
+</html>
