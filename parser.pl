@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Maillog::Parser;
 use Maillog::Error;
-use Maillog::Logger qw(log);
+use Maillog::Logger qw(log print_error);
 use Maillog::Database;
 use Conf;
 
@@ -45,16 +45,6 @@ sub main {
     }
     $parser->close();
 }
-
-sub print_error {
-    my $error = shift;
-
-    $error and %$error or return;
-    $error->{code} or return;
-    $error->{message} ||= "";
-
-    log("ERROR: code $error->{code} message $error->{message}");
-} # print_error
 
 # print usage message and exit
 sub usage {

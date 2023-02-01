@@ -196,4 +196,35 @@ sub clear_table {
     
 } # clear_table
 
+# Получить историю по адресу получателя
+# возвращаем массив массивов с нужными данными
+# Выбираем из таблицы log все int_id с заданным адресом
+# Из той же таблицы выбираем все записи с заданным адресом
+sub address_history {
+    my ($self, $address, $limit) = @_;
+
+    $address or return [];
+    
+    my $sql = $self->{dbh}->selectall_arrayref(
+        q{
+            select x.created, x.str from
+            (
+                select l.created, l.str, l.int_id from log l
+                where address = $1
+                union 
+                select m.created, m.str, m.int_id from message m
+                join log l on m.int_id = l.int_id
+                where l.address = $1
+            ) as x
+            order by x.int_id, x.created
+            limit $2
+        }, undef,
+        $address, $limit + 1,
+    );
+
+    log("address_history: address $address limit $limit: got", scalar @$sql, "records");
+    return $sql;
+
+} # address_history
+
 1;

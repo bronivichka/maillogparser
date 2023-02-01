@@ -5,6 +5,7 @@ use warnings;
 use Exporter 'import';
 use Maillog::Error;
 use Maillog::Logger qw(log log_hash);
+use Maillog::Utility;
 use Data::Dumper;
 
 # Набор функций для обработки записей
@@ -136,10 +137,14 @@ sub split_line {
     my @fields = split(" ", $str);
 
     # проверим на всякий случай, что минимальное количество полей присутствует (включая флаг)
-    @fields >= 4 or return $self->skip_data({}, "incorrect line $str");
+    @fields >= 4 or return {}, $self->skip_data({}, "incorrect line $str");
 
     # дата/время текущей записи
     my $stamp = join(" ", @fields[0,1]);
+
+    # int_id проверяем сразу его длину
+    my $int_id = $fields[2];
+    length($int_id) == 16 or return {}, $self->skip_data({}, "incorrect int_id $str");
 
     # Прочитали запись, но еще не обработали
     # Самое время проверить, не в режиме ли мы дочитывания строк до конца секунды
@@ -158,7 +163,7 @@ sub split_line {
     my $data = {
         created => $stamp,
         id => undef,
-        int_id => $fields[2],
+        int_id => $int_id,
         str => join(" ", @fields[2..$#fields]),
         flag => exists flags->{$fields[3]} ? $fields[3] : 'default',
         address => $fields[4],
@@ -223,10 +228,17 @@ sub add_log_data {
     #
     # 2012-02-13 14:39:22 1RwtJa-000AFB-07 => :blackhole: <tpxmuwr@somehost.ru> R=blackhole_router
     #
-    $data->{address} and $data->{address} =~ /^:[^:]+:$/ and do {
-        $data->{routed_address} =~ s/[<>]//g;
-        $data->{address} = $data->{routed_address};
+    $data->{address} and do {
+        $data->{address} =~ /^:[^:]+:$/ and do {
+            $data->{routed_address} =~ s/[<>]//g;
+            $data->{address} = $data->{routed_address};
+        };
+
+        # финально проверяем, что address похож на email
+        $data->{address} = check_email($data->{address});
     };
+
+
     push @{$self->{log}}, $data;
 
     return E_NO_ERROR;
