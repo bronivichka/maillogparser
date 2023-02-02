@@ -1,5 +1,7 @@
 package Maillog::Error;
 
+# Набор предопределенных ошибок для использования другими модулями
+
 use strict;
 use warnings;
 use Exporter 'import';

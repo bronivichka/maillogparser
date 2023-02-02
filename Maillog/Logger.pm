@@ -1,5 +1,7 @@
 package Maillog::Logger;
 
+# Самый простой логгер в STDOUT, с минимальным форматированием строк
+
 use strict;
 use warnings;
 use Maillog::Error;

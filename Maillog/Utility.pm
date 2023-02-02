@@ -1,5 +1,7 @@
 package Maillog::Utility;
 
+# ОБщие утилиты для проекта
+
 use strict;
 use warnings;
 use Exporter 'import';

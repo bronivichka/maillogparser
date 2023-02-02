@@ -1,12 +1,14 @@
 package Maillog::Database;
 
+# Модуль общения с БД
+# Функции добавления записей в таблицу, очистки по заданным параметрам
+# А также сам поиск по адресу в БД
+
 use strict;
 use warnings;
 use DBI;
 use Maillog::Error;
 use Maillog::Logger qw(log log_hash);
-
-use Data::Dumper;
 
 sub new {
     my ($class, $conf) = @_;

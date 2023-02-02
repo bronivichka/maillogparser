@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 # maillog parser
+# В качестве аргумента командной строки принимает путь к лог-файлу 
+# Парсит его и складывает записи в таблицы message и log
 
 use strict;
 use warnings;
@@ -9,8 +11,6 @@ use Maillog::Error;
 use Maillog::Logger qw(log print_error);
 use Maillog::Database;
 use Conf;
-
-use Data::Dumper;
 
 @ARGV >= 1 or usage();
 my $file = shift;

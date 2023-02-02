@@ -2,7 +2,7 @@
 
 # simple HTTP API daemon
 # принимает POST запрос по адресу http://host:port/search
-# выполняет поиск по адресу
+# выполняет поиск по адресу и возвращает результат списокм строк в простом параграфе <p></p>
 
 use strict;
 use warnings;
@@ -14,8 +14,6 @@ use Maillog::Api;
 use Conf;
 
 use CGI qw();
-
-use Data::Dumper;
 
 my $conf = $Conf::Conf->{api};
 

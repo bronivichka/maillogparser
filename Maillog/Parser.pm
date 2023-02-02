@@ -1,12 +1,14 @@
 package Maillog::Parser;
 
+# Функции парсинга логфайла
+# Обработка, проверка данных, подготовка к импорту в БД
+
 use strict;
 use warnings;
 use Exporter 'import';
 use Maillog::Error;
 use Maillog::Logger qw(log log_hash);
 use Maillog::Utility;
-use Data::Dumper;
 
 # Набор функций для обработки записей
 # В зависимости от флага
