@@ -154,7 +154,7 @@ sub clear_log_records {
 
     log("clear_log_records: begin $self->{begin_stamp} end $self->{end_stamp} total", scalar @ids, "records, deleted $res");
     return E_NO_ERROR;
-};
+}
 
 # Удаляем записи из таблицы message по их id из пачки в $data
 sub clear_message_records {
@@ -202,6 +202,7 @@ sub clear_table {
 # возвращаем массив массивов с нужными данными
 # Выбираем из таблицы log все int_id с заданным адресом
 # Из той же таблицы выбираем все записи с заданным адресом
+# И из таблицы message все с найденными int_id
 sub address_history {
     my ($self, $address, $limit) = @_;
 
